@@ -132,6 +132,7 @@ sudo systemctl status apache2
 ## 🏷️ Tags & Mentions
 
 ### Companies & Platforms
+- [Dobre Technologies](https://www.dobretech.com/)
 - [EVE-NG](https://www.eve-ng.net/)
 - [MySQL](https://www.mysql.com/)
 - [Ubuntu](https://ubuntu.com/)
