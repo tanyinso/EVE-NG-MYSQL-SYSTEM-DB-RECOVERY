@@ -1,128 +1,128 @@
-# EVE-NG MySQL System Database Recovery
+# 🚀 EVE-NG MySQL System Database Recovery
 
-This repository documents a real-world issue encountered on an EVE-NG server where the MySQL service failed to start due to a missing or corrupted system database.
+![EVE-NG](https://img.shields.io/badge/EVE--NG-Recovery-blue?style=for-the-badge)
+![MySQL](https://img.shields.io/badge/MySQL-Fix-orange?style=for-the-badge)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-Server-red?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Fixed-green?style=for-the-badge)
 
-## Problem Description
+This guide documents a real-world scenario where **MySQL on an EVE-NG server** fails due to a missing or corrupted system database.  
+Follow this step-by-step recovery process to restore MySQL and get your EVE-NG lab back online.  
 
-After disk space exhaustion and cleanup on an Ubuntu-based EVE-NG server, MySQL failed to start and returned errors such as:
+---
 
-- MySQL service not running
-- MySQL system database not found
-- Missing files under `/var/lib/mysql`
-- EVE-NG web UI inaccessible
+## ❗ Problem Overview
 
-This issue can completely break an EVE-NG lab environment if not handled correctly.
-<img src="images/problem/mysql crash on eve-ng.png" />
-## Root Cause
+After **disk space exhaustion** on Ubuntu-based EVE-NG, MySQL service failed to start. Common errors:
 
-The MySQL system database became corrupted or partially deleted while the disk was full, leading to missing internal MySQL tables required for startup.
+- ❌ MySQL service not running  
+- ❌ MySQL system database not found  
+- ❌ Missing files under `/var/lib/mysql`  
+- ❌ EVE-NG Web UI inaccessible  
 
-## What This Repository Covers
+> If not fixed, this can **break your entire lab environment**.  
 
-- Verifying MySQL service and error logs
-- Identifying corrupted or missing MySQL system databases
-- Safely rebuilding MySQL system tables
-- Restoring MySQL service functionality
-- Validating EVE-NG web UI after recovery
+<details>
+<summary>📸 Problem Screenshot</summary>
+<img src="images/problem/mysql crash on eve-ng.png" alt="MySQL crash on EVE-NG" width="100%"/>
+</details>
 
-## Environment
+---
 
-- EVE-NG (Community/Pro)
-- Ubuntu Server
-- MySQL Server
-- LVM-backed storage
+## 🕵️ Root Cause
 
-## Troubleshooting
-After getting the /var/lib/mysql not found, I tried installing mysql by running 
-<br><br>
-<i>sudo apt install mysql-server-8</i>
-<br>
-- I received a message saying the disk was full.
-- i ran the command df and i saw that the filesystem /dev/mapper/ubuntu--vg-ubuntu--lv had Use% 100
-- so i resolved this issue by deleting some less important files within the /opt/unetlab/addons/qemu that was less important to create space
-- i later ran the df command and i had the result below.
-<img src="images/problem/checking disk free space-worked.png"  width="100%" height="900px"/>
+The **MySQL system database** was corrupted or partially deleted when the disk was full, causing **missing internal tables** required for startup.  
 
-<br>
-I re-ran 
-<br>
-<i>sudo apt install mysql-server-8</i> 
-<br>
-- Mysql server was installed but the problem wasn't solved
-- Mysl service still wasn't able to start
-<br>
+---
 
-## Solution
- <br>
- 
-- Ensure to Kill any mysql service running using
-  <br>
-  <i>systemctl stop mysql</i>
-  <i>pkill -i mysqld</i>
-  <br>
-- Remove the any /var/lib/mysql directory present
-  <br>
-  <i>rm -rf /var/lib/mysql </i>
-  <br>
-- Create a new /var/lib/mysql directory
-  <br>
-  <i>mkdir /var/lib/mysql</i>
-  <br>
-- Adjust the permission to the newly directory created
-  <br>
-  <i>chown -R mysql:mysql /var/lib/mysql </i>
-  <br>
-  <i>chmod 750 /var/lib/mysql </i>
-  <br>
-- Reinitialize to re-create the mysql database
-  <br>
-  <i>mysqld --initialize-insecure --user=mysql</i>
-  <br>
-- Try to start the mysql service
-  <br>
-  <i>sudo systemctl start mysql</i>
-  <br>
+## 📌 What This Guide Covers
 
-- Check the service to ensure its running
- <br>
-  <i>sudo systemctl status mysql</i>
+- ✅ Verify MySQL service and logs  
+- ✅ Identify corrupted/missing system databases  
+- ✅ Rebuild MySQL system tables safely  
+- ✅ Restore MySQL service functionality  
+- ✅ Validate EVE-NG Web UI  
 
-<br>
-<img src="images/solution/fixed mysql server.png" />
-- After doing all that, the mysql server should be up and running !
-<br>
+---
 
-## Restoring the database schema
+## 🖥️ Environment
 
-- Login to the mysql server by running sudo mysql -uroot -p
-- While logged in, Create the following;
-  - create database
-  - create the user account
-  - grant all privileges to the account
-  - Flush privileges
-  - exit;
- 
-<br>
-<img src="images/solution/recreating eve-ng database.png" />
-<br>
-<br>
+- **EVE-NG** (Community/Pro)  
+- Ubuntu Server  
+- MySQL Server (v8)  
+- LVM-backed storage  
 
-## Fixed web Access
-- Fixed all necessary permission using the command
-  unl_wrapper -a fixpermissions
-- Restart database
-  unl_wrapper -a restoredb
-- Check apache service to see if running
-  sudo systemctl status apache2
-<br>
-<img src="images/solution/restarting db.png" />
-<br>
+---
 
-  - check to see if your lab is accessible on browser
-  
-<br>
-<br>
-     Hurray! 
-<br>
-<br>
-<img src="images/solution/lab up and running.png" />
+## 🔧 Troubleshooting Steps
+
+<details>
+<summary>Click to Expand Troubleshooting</summary>
+
+### 1️⃣ Check Disk Space and Initial MySQL Installation
+
+```bash
+sudo apt install mysql-server-8
+df 
+```
+
+ Initial installation failed due to full disk space
+
+  Cleared unnecessary files in /opt/unetlab/addons/qemu
+
+  Verified disk space after cleanup:
+
+<img src="images/problem/checking disk free space-worked.png" alt="Checking Disk Space" width="100%" />
+
+ Reinstalled MySQL:
+ ```bash
+ sudo apt install mysql-server-8
+```
+MySQL installed, but service still won’t start
+
+</details>
+
+## 🗄️ Restoring the EVE-NG Database
+
+<details>
+<summary>Click to Expand Database Restoration</summary>
+
+### 1️⃣ Login to MySQL
+
+```bash
+sudo mysql -uroot -p
+```
+2️⃣ Create database and user
+```sql
+CREATE DATABASE eve_ng_db;
+CREATE USER 'eve_ng'@'localhost' IDENTIFIED BY 'eve_ng';
+GRANT ALL PRIVILEGES ON eve_ng_db.* TO 'eve_ng'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+<img src="images/solution/recreating eve-ng database.png" alt="Recreating EVE-NG database" width="100%" /> </details>
+
+## 🌐 Fixing Web Access
+
+<details>
+<summary>Click to Expand Web Access Fix</summary>
+
+### 1️⃣ Fix EVE-NG permissions
+
+```bash
+unl_wrapper -a fixpermissions
+```
+
+## 2️⃣ Restore database
+```bash
+unl_wrapper -a restoredb
+```
+## 3️⃣ Check Apache service
+```bash
+sudo systemctl status apache2
+```
+## 4️⃣ Verify your lab in the browser
+<img src="images/solution/lab up and running.png" alt="EVE-NG lab running" width="100%" />
+
+✅ Your EVE-NG lab is now fully operational!
+
+</details> 
