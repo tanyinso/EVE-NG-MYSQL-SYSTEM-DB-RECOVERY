@@ -80,7 +80,8 @@ df
 MySQL installed, but service still won’t start
 
 </details>
- ## 🚀 Solution
+---
+## 🚀 Solution
 
 Follow the steps below in order:
 <details>
@@ -113,7 +114,7 @@ sudo systemctl status mysql
 
 ✅ After completing these steps, the MySQL server should be up and running.
 </details>
-
+---
 ## 🗄️ Restoring the EVE-NG Database
 
 <details>
