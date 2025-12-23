@@ -80,41 +80,41 @@ df
 MySQL installed, but service still won’t start
 
 </details>
----
-## 🚀 Solution
 
-Follow the steps below in order:
+## 🚀 Solution
 <details>
+Follow the steps below in order:
 
 ### 1️⃣ Stop any running MySQL services
 ```bash
 systemctl stop mysql
 pkill -i mysqld
 ```
-###2️⃣ Remove the existing MySQL data directory
+### 2️⃣ Remove the existing MySQL data directory
 rm -rf /var/lib/mysql
 
-###3️⃣ Create a new MySQL data directory
+### 3️⃣ Create a new MySQL data directory
 mkdir /var/lib/mysql
 
-###4️⃣ Set correct ownership and permissions
+### 4️⃣ Set correct ownership and permissions
 chown -R mysql:mysql /var/lib/mysql
 chmod 750 /var/lib/mysql
 
-###5️⃣ Reinitialize MySQL system databases
+### 5️⃣ Reinitialize MySQL system databases
 mysqld --initialize-insecure --user=mysql
 
-###6️⃣ Start the MySQL service
+### 6️⃣ Start the MySQL service
 sudo systemctl start mysql
 
-###7️⃣ Verify that MySQL is running
+### 7️⃣ Verify that MySQL is running
 sudo systemctl status mysql
 
 <img src="images/solution/fixed mysql server.png" alt="MySQL service running" />
 
 ✅ After completing these steps, the MySQL server should be up and running.
 </details>
----
+
+
 ## 🗄️ Restoring the EVE-NG Database
 
 <details>
